@@ -1,0 +1,8 @@
+.autotest
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/txtbook
+lib/txtbook.rb
+test/test_txtbook.rb
