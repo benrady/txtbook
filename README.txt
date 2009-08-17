@@ -1,26 +1,26 @@
 = txtbook
 
-* FIX (url)
+http://github.com/bjrady/txtbook/tree/master
 
 == DESCRIPTION:
 
-FIX (describe your package)
+A presentation and training class generation and packaging tool based on rake
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+* No noteworthy features yet
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+  txtbook myNewPresentation
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+* Ruby 1.8 or later
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* sudo gem install txtbook
 
 == LICENSE:
 

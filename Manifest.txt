@@ -5,4 +5,4 @@ README.txt
 Rakefile
 bin/txtbook
 lib/txtbook.rb
-test/test_txtbook.rb
+spec/txtbook_spec.rb
