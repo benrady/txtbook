@@ -1,15 +1,11 @@
 require 'fileutils'
 
 module TxtBook
-  TEXTBOOK_DIRS = ['answers', 'exercises', 'slides']
-  
   class Factory
     def create(cmd_line_args)
       textbook_root = cmd_line_args[0]
-      TEXTBOOK_DIRS.each do |dir|
-        FileUtils.mkdir_p File.join(textbook_root, dir)
-      end
-      
+      template = File.join(File.dirname(__FILE__), 'txtbook', 'new_book_template')
+      FileUtils.cp_r(template, textbook_root) 
     end
   end
   

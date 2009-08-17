@@ -13,6 +13,7 @@ module TxtBook
       File.directory?('new-book/answers').should be_true
       File.directory?('new-book/exercises').should be_true
       File.directory?('new-book/slides').should be_true
+      File.exists?('new-book/Rakefile').should be_true
     end
     
     after(:each) do
