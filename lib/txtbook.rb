@@ -9,7 +9,7 @@ module TxtBook
     end
   end
   
-  class Tools
+  class KeynoteBuilder
     
   end
 end

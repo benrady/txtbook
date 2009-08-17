@@ -13,6 +13,8 @@ A presentation and training class generation and packaging tool based on rake
 == SYNOPSIS:
 
   txtbook myNewPresentation
+  cd myNewPresentation
+  rake
 
 == REQUIREMENTS:
 
