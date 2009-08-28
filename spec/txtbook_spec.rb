@@ -33,15 +33,16 @@ module TxtBook
     it "should unpack keynote09 files"
     
     it "should unpack keynote08 files" do
-      @builder.unpack
+      @builder.unbind
       File.directory?('temp-book/work/sample.key').should be_true
       File.exists?('temp-book/work/sample.key/index.apxl').should be_true
     end
     
-    it "should insert code snippets into slides" do
-      @builder.unpack
-      keynote_xml = IO.read('temp-book/work/sample.key/index.apxl')
-      keynote_xml.include?("public class Sample").should be_true
+    it "should insert code snippets into keynote content" do
+      @builder.keynote_content = "${java/Sample.java}"
+      @builder.snippet = "public class Sample"
+      @builder.press
+      @builder.keynote_content.should include("public class Sample")
     end
     
     it "should repack the new keynote content" do
@@ -51,11 +52,8 @@ module TxtBook
       file.should_receive(:write).with("My Fake Java")
       File.should_receive(:open).with(full_file_path_to_prez, "w+").and_yield(file)
       
-      builder = KeynoteBuilder.new("temp-book")
-      builder.snippet = "My Fake Java"
-      builder.keynote_content = "${java/Sample.java}"
-      builder.pack
-      
+      @builder.keynote_content = "My Fake Java"
+      @builder.rebind
     end
     
     after(:each) do
