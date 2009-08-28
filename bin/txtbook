@@ -2,5 +2,4 @@
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
 require 'txtbook'
 
-factory = TxtBook::Factory.new
-factory.create(ARGV)
+TxtBook::Factory.create(ARGV)
