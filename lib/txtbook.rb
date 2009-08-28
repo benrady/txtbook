@@ -26,27 +26,23 @@ module TxtBook
         file.write new_content
       end
     end
-      
-    class << self
-      def unpack(textbook)
-        textbook = File.expand_path(textbook)
-        work_dir = File.join(textbook, "work")
-        FileUtils.mkdir_p work_dir
-        Dir[File.join(textbook, "slides/*.key")].each do |prez|
-          FileUtils.cp_r(prez, work_dir)
-          gunzip(File.join(work_dir, File.basename(prez), "index.apxl.gz"))
-          keynote_content = IO.read(File.join(work_dir, File.basename(prez), "index.apxl"))
-          
-          keynote_content.gsub!('${java/Sample.java}', IO.read(File.join(textbook, "snippets", 'java/Sample.java')))
-          File.open(File.join(work_dir, File.basename(prez), "index.apxl"), "w+") do |file|
-            file.write keynote_content
-          end
+
+    def unpack
+      FileUtils.mkdir_p @work_dir
+      Dir[File.join(@textbook, "slides/*.key")].each do |prez|
+        FileUtils.cp_r(prez, @work_dir)
+        gunzip(File.join(@work_dir, File.basename(prez), "index.apxl.gz"))
+        @keynote_content = IO.read(File.join(@work_dir, File.basename(prez), "index.apxl"))
+        
+        @keynote_content.gsub!('${java/Sample.java}', IO.read(File.join(@textbook, "snippets", 'java/Sample.java')))
+        File.open(File.join(@work_dir, File.basename(prez), "index.apxl"), "w+") do |file|
+          file.write @keynote_content
         end
       end
+    end
 
-      def gunzip(filename)
-        system("gunzip --force #{filename}")
-      end
-    end    
+    def gunzip(filename)
+      system("gunzip --force #{filename}")
+    end
   end
 end

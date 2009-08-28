@@ -27,18 +27,19 @@ module TxtBook
   describe KeynoteBuilder do
     before(:each) do
       Factory.create(['temp-book'])
+      @builder = KeynoteBuilder.new('temp-book')
     end
     
     it "should unpack keynote09 files"
     
     it "should unpack keynote08 files" do
-      KeynoteBuilder.unpack('temp-book')
+      @builder.unpack
       File.directory?('temp-book/work/sample.key').should be_true
       File.exists?('temp-book/work/sample.key/index.apxl').should be_true
     end
     
     it "should insert code snippets into slides" do
-      KeynoteBuilder.unpack('temp-book')
+      @builder.unpack
       keynote_xml = IO.read('temp-book/work/sample.key/index.apxl')
       keynote_xml.include?("public class Sample").should be_true
     end
