@@ -32,30 +32,46 @@ module TxtBook
     
     it "should unpack keynote09 files"
     
+    
     it "should unpack keynote08 files" do
-      IO.should_receive(:read).with(full_path_to("index.apxl")).and_return("${java/Sample.java}")
+      IO.stub!(:read).with(full_path_to_keynote("index.apxl")).and_return("${java/Sample.java}")
       @builder.unbind
       @builder.keynote_content.should == "${java/Sample.java}"
     end
     
+    it "should copy the keynote08 template to a working directory" do
+      FileUtils.should_receive(:cp_r).with(full_path_to_textbook("slides/sample.key"),
+                                      full_path_to_textbook("work")).ordered
+      IO.should_receive(:read).ordered
+      
+      @builder.unbind
+      
+    end
+    
     it "should insert code snippets into keynote content" do
-      @builder.keynote_content = "${java/Sample.java}"
-      @builder.snippet = "public class Sample"
+      IO.stub!(:read).with("snippets/java/JavaSample.java").and_return("public class JavaSample")
+      @builder.keynote_content = "${java/JavaSample.java}"
+      
       @builder.press
-      @builder.keynote_content.should include("public class Sample")
+      
+      @builder.keynote_content.should include("public class JavaSample")
     end
     
     it "should repack the new keynote content" do      
       file = mock(File)
       file.should_receive(:write).with("My Fake Java")
-      File.should_receive(:open).with(full_path_to("index.apxl"), "w+").and_yield(file)
+      File.should_receive(:open).with(full_path_to_keynote("index.apxl"), "w+").and_yield(file)
       
       @builder.keynote_content = "My Fake Java"
       @builder.rebind
     end
     
-    def full_path_to(filename)
-      File.expand_path(File.dirname(__FILE__) + "/../temp-book/work/sample.key/index.apxl")
+    def full_path_to_textbook(filepath)
+      File.expand_path(File.dirname(__FILE__) + "/../temp-book/#{filepath}")
+    end
+    
+    def full_path_to_keynote(filename)
+      full_path_to_textbook("work/sample.key/#{filename}")
     end
     
     after(:each) do

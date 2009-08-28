@@ -23,13 +23,15 @@ module TxtBook
       FileUtils.mkdir_p @work_dir
       Dir[File.join(@textbook, "slides/*.key")].each do |prez|
         FileUtils.cp_r(prez, @work_dir)
+        # DEBT Untested
         gunzip(File.join(@work_dir, File.basename(prez), "index.apxl.gz"))
         @keynote_content = IO.read(File.join(@work_dir, File.basename(prez), "index.apxl"))
       end
     end
     
     def press
-      @keynote_content.gsub!('${java/Sample.java}', @snippet)
+      @snippet = IO.read("snippets/java/JavaSample.java")
+      @keynote_content.gsub!('${java/JavaSample.java}', @snippet)
     end
     
     def rebind
