@@ -57,11 +57,12 @@ module TxtBook
     end
     
     it "should repack the new keynote content" do      
+      @builder.keynote_content = "My Fake Java"
+      Dir.should_receive(:[]).with("#{@builder.work_dir}/*.key").and_return(['prez.key'])
       file = mock(File)
       file.should_receive(:write).with("My Fake Java")
-      File.should_receive(:open).with(full_path_to_keynote("index.apxl"), "w+").and_yield(file)
+      File.should_receive(:open).with(full_path_to_textbook("work/prez.key/index.apxl"), "w+").and_yield(file)
       
-      @builder.keynote_content = "My Fake Java"
       @builder.rebind
     end
     

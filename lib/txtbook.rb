@@ -11,7 +11,7 @@ module TxtBook
   end
   
   class KeynoteBuilder
-    attr_accessor :snippets, :keynote_content
+    attr_accessor :snippets, :keynote_content, :work_dir
 
     def initialize(book_dir)
       @textbook = File.expand_path(book_dir)
@@ -37,9 +37,10 @@ module TxtBook
     end
     
     def rebind
-      prez = "sample.key"
-      File.open(File.join(@work_dir, prez, "index.apxl"), "w+") do |file|
-        file.write @keynote_content
+      Dir[File.join(@work_dir, "*.key")].each do |prez|
+        File.open(File.join(@work_dir, prez, "index.apxl"), "w+") do |file|
+          file.write @keynote_content
+        end
       end
     end
 
