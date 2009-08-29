@@ -31,11 +31,8 @@ module TxtBook
     end
     
     def press
-      templates = @keynote_content.split(/\$\{(.*?)\}/)
-      templates.each do |template|
-        if !template.strip.empty?
-          @keynote_content.gsub!("${#{template}}", IO.read("snippets/#{template}"))
-        end
+      @keynote_content.scan(/\$\{(.+?)\}/).each do |template|
+        @keynote_content.gsub!("${#{template}}", IO.read("snippets/#{template}"))
       end
     end
     

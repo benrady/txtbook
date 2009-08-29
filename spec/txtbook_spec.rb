@@ -55,14 +55,14 @@ module TxtBook
       @builder.keynote_content.should include("public class JavaSample")
     end
     
-    it "should replace all code snippet templates in keynote content" do
-      @builder.keynote_content = "${java/Snippet1.java} ${java/Snippet2.java}"
+    it "should replace multiple code snippet templates in keynote content" do
+      @builder.keynote_content = "${java/Snippet1.java} other stuff ${java/Snippet2.java}"
       IO.should_receive(:read).with("snippets/java/Snippet1.java").and_return("Snippet1")
       IO.should_receive(:read).with("snippets/java/Snippet2.java").and_return("Snippet2")
       
       @builder.press
       
-      @builder.keynote_content.should include("Snippet1 Snippet2")
+      @builder.keynote_content.should include("Snippet1 other stuff Snippet2")
     end
     
     it "should repack the new keynote content" do      
