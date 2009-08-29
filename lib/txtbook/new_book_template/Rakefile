@@ -3,7 +3,7 @@ require 'rubygems'
 require 'rake'
 
 task :default do
-  builder = TxtBook::KeynoteBuilder.new(File.expand_path(File.dirname(__FILE__) + "/")))
+  builder = TxtBook::KeynoteBuilder.new(File.expand_path(File.dirname(__FILE__) + "/"))
   builder.unbind
   builder.press
   builder.rebind
