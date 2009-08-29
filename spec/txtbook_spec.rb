@@ -32,7 +32,6 @@ module TxtBook
     
     it "should unpack keynote09 files"
     
-    
     it "should unpack keynote08 files" do
       IO.stub!(:read).with(full_path_to_keynote("index.apxl")).and_return("${java/Sample.java}")
       @builder.unbind
@@ -45,16 +44,25 @@ module TxtBook
       IO.should_receive(:read).ordered
       
       @builder.unbind
-      
     end
     
     it "should insert code snippets into keynote content" do
-      IO.stub!(:read).with("snippets/java/JavaSample.java").and_return("public class JavaSample")
       @builder.keynote_content = "${java/JavaSample.java}"
+      IO.stub!(:read).with("snippets/java/JavaSample.java").and_return("public class JavaSample")
       
       @builder.press
       
       @builder.keynote_content.should include("public class JavaSample")
+    end
+    
+    it "should replace all code snippet templates in keynote content" do
+      @builder.keynote_content = "${java/Snippet1.java} ${java/Snippet2.java}"
+      IO.should_receive(:read).with("snippets/java/Snippet1.java").and_return("Snippet1")
+      IO.should_receive(:read).with("snippets/java/Snippet2.java").and_return("Snippet2")
+      
+      @builder.press
+      
+      @builder.keynote_content.should include("Snippet1 Snippet2")
     end
     
     it "should repack the new keynote content" do      

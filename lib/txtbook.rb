@@ -1,7 +1,6 @@
 require 'fileutils'
 
 module TxtBook
-  
   class Factory
     def self.create(cmd_line_args)
       textbook_root = cmd_line_args[0]
@@ -12,7 +11,7 @@ module TxtBook
   end
   
   class KeynoteBuilder
-    attr_accessor :snippet, :keynote_content
+    attr_accessor :snippets, :keynote_content
 
     def initialize(book_dir)
       @textbook = File.expand_path(book_dir)
@@ -23,19 +22,24 @@ module TxtBook
       FileUtils.mkdir_p @work_dir
       Dir[File.join(@textbook, "slides/*.key")].each do |prez|
         FileUtils.cp_r(prez, @work_dir)
+        
         # DEBT Untested
         gunzip(File.join(@work_dir, File.basename(prez), "index.apxl.gz"))
+        
         @keynote_content = IO.read(File.join(@work_dir, File.basename(prez), "index.apxl"))
       end
     end
     
     def press
-      @snippet = IO.read("snippets/java/JavaSample.java")
-      @keynote_content.gsub!('${java/JavaSample.java}', @snippet)
+      templates = @keynote_content.split(/\$\{(.*?)\}/)
+      templates.each do |template|
+        if !template.strip.empty?
+          @keynote_content.gsub!("${#{template}}", IO.read("snippets/#{template}"))
+        end
+      end
     end
     
     def rebind
-
       prez = "sample.key"
       File.open(File.join(@work_dir, prez, "index.apxl"), "w+") do |file|
         file.write @keynote_content
