@@ -32,6 +32,8 @@ module TxtBook
     
     it "should unpack keynote09 files"
     
+    it "should only pull lines between textbook comments"
+    
     it "should unpack keynote08 files" do
       IO.stub!(:read).with(full_path_to_keynote("index.apxl")).and_return("${java/Sample.java}")
       @builder.unbind
