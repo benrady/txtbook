@@ -9,18 +9,9 @@ require 'fileutils'
 module TxtBook
   describe Factory do    
     it "can create a new TextBook" do
-      # DEBT It would be nice if we could mock out the file system module
-      # but i'm not sure how to do that. 
+      template = './spec/../lib/txtbook/new_book_template'
+      FileUtils.should_receive(:cp_r).with(template, 'new-book').ordered
       Factory.create(['new-book'])
-      File.directory?('new-book').should be_true
-      File.directory?('new-book/answers').should be_true
-      File.directory?('new-book/exercises').should be_true
-      File.directory?('new-book/slides').should be_true
-      File.exists?('new-book/Rakefile').should be_true
-    end
-    
-    after(:each) do
-      FileUtils.rm_rf('new-book')
     end
   end
   
@@ -28,16 +19,6 @@ module TxtBook
     before(:each) do
       Factory.create(['temp-book'])
       @builder = KeynoteBuilder.new('temp-book')
-    end
-    
-    it "should unpack keynote09 files"
-    
-    it "should only pull lines between textbook comments"
-    
-    it "should unpack keynote08 files" do
-      IO.stub!(:read).with(full_path_to_keynote("index.apxl")).and_return("${java/Sample.java}")
-      @builder.unbind
-      @builder.keynote_content.should == "${java/Sample.java}"
     end
     
     it "should copy the keynote08 template to a working directory" do
@@ -48,6 +29,14 @@ module TxtBook
       @builder.unbind
     end
     
+    it "should unbind keynote09 files"
+    
+    it "should unbind keynote08 files" do
+      IO.stub!(:read).with(full_path_to_keynote("index.apxl")).and_return("${java/Sample.java}")
+      @builder.unbind
+      @builder.keynote_content.should == "${java/Sample.java}"
+    end
+            
     it "should insert code snippets into keynote content" do
       @builder.keynote_content = "${java/JavaSample.java}"
       IO.stub!(:read).with("snippets/java/JavaSample.java").and_return("public class JavaSample")
