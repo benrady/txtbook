@@ -45,7 +45,7 @@ module TxtBook
     end
 
     def gunzip(filename)
-      system("gunzip --force #{filename}")
+      Kernel.system("gunzip --force #{filename}")
     end
   end
 end

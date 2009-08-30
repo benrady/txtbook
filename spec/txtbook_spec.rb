@@ -33,7 +33,11 @@ module TxtBook
     
     it "should unbind keynote08 files" do
       IO.stub!(:read).with(full_path_to_keynote("index.apxl")).and_return("${java/Sample.java}")
+      zipped_content = full_path_to_keynote("index.apxl.gz")
+      Kernel.should_receive(:system).with("gunzip --force #{zipped_content}")
+      
       @builder.unbind
+      
       @builder.keynote_content.should == "${java/Sample.java}"
     end
             
