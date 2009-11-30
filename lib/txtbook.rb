@@ -4,6 +4,7 @@ module TxtBook
   class Factory
     def self.create(cmd_line_args)
       textbook_root = cmd_line_args[0]
+
       # DEBT Move to member var
       template = File.join(File.dirname(__FILE__), 'txtbook', 'new_book_template')
       FileUtils.cp_r(template, textbook_root) 
@@ -20,13 +21,13 @@ module TxtBook
 
     def unbind
       FileUtils.mkdir_p @work_dir
-      Dir[File.join(@textbook, "slides/*.key")].each do |prez|
-        FileUtils.cp_r(prez, @work_dir)
+      Dir[File.join(@textbook, "slides/*.key")].each do |preso|
+        copy_to_working_dir(preso)
         
-        # DEBT Untested
-        gunzip(File.join(@work_dir, File.basename(prez), "index.apxl.gz"))
-        
-        @keynote_content = IO.read(File.join(@work_dir, File.basename(prez), "index.apxl"))
+        gunzip(File.join(@work_dir, File.basename(preso), "index.apxl.gz"))
+
+        content_file = File.join(@work_dir, File.basename(preso), "index.apxl")
+        @keynote_content = IO.read(content_file)
       end
     end
     
@@ -37,8 +38,8 @@ module TxtBook
     end
     
     def rebind
-      Dir[File.join(@work_dir, "*.key")].each do |prez|
-        File.open(File.join(@work_dir, prez, "index.apxl"), "w+") do |file|
+      Dir[File.join(@work_dir, "*.key")].each do |preso|
+        File.open(File.join(@work_dir, File.basename(preso), "index.apxl"), "w+") do |file|
           file.write @keynote_content
         end
       end
@@ -47,5 +48,11 @@ module TxtBook
     def gunzip(filename)
       Kernel.system("gunzip --force #{filename}")
     end
+
+    private
+
+      def copy_to_working_dir(preso)
+        FileUtils.cp_r(preso, @work_dir)
+      end
   end
 end

@@ -29,7 +29,7 @@ module TxtBook
       @builder.unbind
     end
     
-    it "should unbind keynote09 files"
+    it "should unbind keynote09 files" 
     
     it "should unbind keynote08 files" do
       IO.stub!(:read).with(full_path_to_keynote("index.apxl")).and_return("${java/Sample.java}")
@@ -62,7 +62,7 @@ module TxtBook
     
     it "should repack the new keynote content" do      
       @builder.keynote_content = "My Fake Java"
-      Dir.should_receive(:[]).with("#{@builder.work_dir}/*.key").and_return(['prez.key'])
+      Dir.should_receive(:[]).with("#{@builder.work_dir}/*.key").and_return(["#{@builder.work_dir}/prez.key"])
       file = mock(File)
       file.should_receive(:write).with("My Fake Java")
       File.should_receive(:open).with(full_path_to_textbook("work/prez.key/index.apxl"), "w+").and_yield(file)

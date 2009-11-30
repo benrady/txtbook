@@ -8,13 +8,14 @@ A presentation and training class generation and packaging tool based on rake
 
 == FEATURES/PROBLEMS:
 
-* No noteworthy features yet
+* Injects code snippets into Keynote '08 presentations 
 
 == SYNOPSIS:
 
   txtbook myNewPresentation
   cd myNewPresentation
   rake
+  open work/sample.key
 
 == REQUIREMENTS:
 
